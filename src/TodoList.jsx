@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import React from "react";
+import TodoListItem from "./TodoListItem";
 
 const todoList = [
     {
@@ -20,7 +21,7 @@ function TodoList() {
     return (
         <ul>
             {
-            todoList.map((item) => (<li key={item.id}>{item.title}</li>))
+            todoList.map((item) => (<TodoListItem key={item.id} todo={item} />))
             }
         </ul>
     );
