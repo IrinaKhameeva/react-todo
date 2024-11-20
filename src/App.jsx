@@ -12,16 +12,13 @@ import AddTodoForm from './AddTodoForm'
 function App() {
   const [newTodo, setNewTodo] = React.useState('');
 
-  function handleAddTodo (event) {
-    setNewTodo;
-    props.onAddTodo(event);
-  };
+
 
   return (
     <div>
       <h1>Todo List</h1>
       <AddTodoForm onAddTodo={setNewTodo}/>
-      <p>New task <strong>{newTodo}</strong></p>
+      <p>New Todo <strong>{newTodo}</strong></p>
       <TodoList />
     </div>
   )
