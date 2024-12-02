@@ -1,7 +1,7 @@
 import React from "react";
 import TodoListItem from "./TodoListItem";
 
-const todoList = [
+/*const todoList = [
     {
       id:1,
       title: 'Complete assignment',
@@ -14,10 +14,10 @@ const todoList = [
       id:3,
       title: 'Complete assignment',
     }
-];
+];*/
 
 
-function TodoList() {
+function TodoList({todoList}) {
     return (
         <ul>
             {
