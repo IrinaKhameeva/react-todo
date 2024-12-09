@@ -2,8 +2,8 @@ import React, {useState} from "react";
 
 
 
-function AddTodoForm({onAddItem1}) {
-    console.log(onAddItem1);
+function AddTodoForm({onAddTodo}) {
+    console.log(onAddTodo);
 
     const [todoTitle, setTodoTitle] = React.useState("");
 
@@ -16,7 +16,7 @@ function AddTodoForm({onAddItem1}) {
         event.preventDefault();
         console.log("title:" + todoTitle);
 
-        onAddItem1({
+        onAddTodo({
             title: todoTitle,
             id: Date.now(), 
           });
