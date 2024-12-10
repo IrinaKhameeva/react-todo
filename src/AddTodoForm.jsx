@@ -23,10 +23,6 @@ function AddTodoForm({onAddTodo}) {
         setTodoTitle("");
 
 
-          //console.log(newTodo); 
-
-            //addTodo(newTodo);
-
             
     }
 
