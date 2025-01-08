@@ -47,6 +47,7 @@ function App() {
     <>
       <h1>Todo List</h1>
       <AddTodoForm onAddTodo={addTodo} />
+
       {isLoading ? (
         <p>Loading...</p>
       ) : todoList.length === 0 ? (
@@ -56,6 +57,7 @@ function App() {
         
       )}
             
+      <TodoList todoList={todoList} onRemoveTodo={onRemoveTodo} />
     </>
   )
 }
