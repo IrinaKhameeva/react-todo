@@ -8,24 +8,75 @@ import InputWithLabel from './InputWithLabel'
 
 
 
+
 function App() {
 
   const [todoList, setTodoList] = useState(JSON.parse(localStorage.getItem("todoList")) || []);
   const [isLoading, setIsLoading] = useState(true);
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+  
+
+  const fetchData = async() => {
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization:`Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`
+      }
+    };
+
+    try {
+      const response = await fetch(url, options);
+      if(!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      const todos = data.records.map(todo => ({
+        title: todo.fields.title,
+        id: todo.id
+      }));
+
+      setTodoList(todos);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const postTodo = async(newTodo) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization:`Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fields: {
+          title: newTodo.title,
+        }
+      })
+    };
+
+    try {
+      const response = await fetch(url, options);
+      if(!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      return {
+        title: data.fields.title,
+        id: data.id,
+      };
+    } catch (error) {
+      console.error("Error adding todo:", error);
+      return null;
+    }
+
+  };
+
+  
 
   useEffect(() => {
-    console.log("creating prom")
-    new Promise((resolve) => 
-      setTimeout(()=>{
-       resolve({
-          todoList: JSON.parse(localStorage.getItem("todoList")) || [],
-       });
-      }, 5000)
-    ).then((result)=>{
-      console.log("result:" + result);
-      setTodoList(result.todoList);
-      setIsLoading(false);
-    });
+    fetchData()
   }, []);
 
   useEffect(() => {
@@ -35,9 +86,12 @@ function App() {
     
   }, [todoList])
 
-  function addTodo (newTodo){
-    setTodoList([newTodo, ...todoList]);
-  }
+  const addTodo = async (newTodo) => {
+    const createdTodo = await postTodo(newTodo);
+    if (createdTodo) {
+      setTodoList([createdTodo, ...todoList]);
+    }
+  };
 
   const onRemoveTodo = (id) => {
 		setTodoList(todoList.filter(item => item.id !== id));
@@ -56,8 +110,6 @@ function App() {
         <TodoList todoList={todoList} onRemoveTodo={onRemoveTodo} />
         
       )}
-            
-      <TodoList todoList={todoList} onRemoveTodo={onRemoveTodo} />
     </>
   )
 }
