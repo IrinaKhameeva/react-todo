@@ -5,6 +5,8 @@ import './App.css'
 import TodoList from './TodoList'
 import AddTodoForm from './AddTodoForm'
 import InputWithLabel from './InputWithLabel'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+
 
 
 
@@ -79,38 +81,59 @@ function App() {
     fetchData()
   }, []);
 
-  useEffect(() => {
-    if(!isLoading){
-      localStorage.setItem("savedTodoList", JSON.stringify(todoList));
-    }
+   useEffect(() => {
+     if(!isLoading){
+       localStorage.setItem("savedTodoList", JSON.stringify(todoList));
+     }
     
-  }, [todoList])
+   }, [todoList])
 
-  const addTodo = async (newTodo) => {
-    const createdTodo = await postTodo(newTodo);
-    if (createdTodo) {
-      setTodoList([createdTodo, ...todoList]);
-    }
-  };
+   const addTodo = async (newTodo) => {
+     const createdTodo = await postTodo(newTodo);
+     if (createdTodo) {
+       setTodoList([createdTodo, ...todoList]);
+     }
+   };
 
-  const onRemoveTodo = (id) => {
-		setTodoList(todoList.filter(item => item.id !== id));
-  }  
-  console.log("app:")
-  return (
-    <>
-      <h1>Todo List</h1>
-      <AddTodoForm onAddTodo={addTodo} />
+   const onRemoveTodo = (id) => {
+	 	setTodoList(todoList.filter(item => item.id !== id));
+   }  
+    console.log("app:")
 
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : todoList.length === 0 ? (
-      <p>You have no tasks yet</p> 
-      ) : (
-        <TodoList todoList={todoList} onRemoveTodo={onRemoveTodo} />
+   const Home = () => (
+     <>
+       <h1>Todo List</h1>
+       <AddTodoForm onAddTodo={addTodo} />
+
+       {isLoading ? (
+         <p>Loading...</p>
+       ) : todoList.length === 0 ? (
+       <p>You have no tasks yet</p> 
+       ) : (
+         <TodoList todoList={todoList} onRemoveTodo={onRemoveTodo} />
         
-      )}
-    </>
-  )
+       )}
+     </>
+   );
+
+
+  return (
+      <BrowserRouter>
+          <nav>
+            <Link to='/'>Home</Link>
+            <Link to='/new'>New</Link>
+          </nav>
+          <Routes>
+              <Route
+                  path='/'
+                  element={<Home/>}
+              />
+              <Route
+                  path='/new'
+                  element={<h1>New List</h1>}
+              />
+          </Routes>
+      </BrowserRouter>
+  );
 }
 export default App;
