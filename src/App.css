@@ -1,3 +1,16 @@
+body {
+  background-color: hwb(180 77% 5%);
+  color: blue;
+ 
+.montserrat-<uniquifier> {
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -8,6 +21,9 @@
 nav {
   display: flex;
   justify-content: space-evenly;
+  font-style: italic;
+  font-size: larger;
+  font-weight: 500;
 }
 
 .logo {
@@ -17,7 +33,7 @@ nav {
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #4cd4b7aa);
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
