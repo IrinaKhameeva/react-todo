@@ -7,13 +7,6 @@ function AddTodoForm({onAddTodo}) {
     console.log(onAddTodo);
 
     const [todoTitle, setTodoTitle] = React.useState("");
-    //  const inputRef = useRef(null);
-
-    // useEffect(() => {
-    //     if (inputRef.current) {
-    //         inputRef.current.focus();
-    //     }
-    // }, [todoTitle])
 
     function handleTitleChange(event) {
         const newTodoTitle = event.target.value;
@@ -36,7 +29,7 @@ function AddTodoForm({onAddTodo}) {
 
     return (
         <form onSubmit={handleAddTodo}>
-            <InputWithLabel
+            <InputWithLabel style = {{color:"red"}}
                 todoTitle={todoTitle}
                 handleTitleChange={handleTitleChange}>Title</InputWithLabel>
             <button type="submit" >Add</button>
