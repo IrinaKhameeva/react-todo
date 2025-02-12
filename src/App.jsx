@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import TodoList from './components/TodoList'
 import AddTodoForm from './components/AddTodoForm'
+import InputWithLabel from './components/InputWithLabel'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 
 
@@ -14,7 +15,7 @@ function App() {
 
   const [todoList, setTodoList] = useState(JSON.parse(localStorage.getItem("todoList")) || []);
   const [isLoading, setIsLoading] = useState(true);
-  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=title&sort[0][direction]=asc`;
   
 
   const fetchData = async() => {
@@ -34,7 +35,12 @@ function App() {
       const todos = data.records.map(todo => ({
         title: todo.fields.title,
         id: todo.id
-      }));
+      }))
+      .sort((a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title === b.title) return 0;
+        return 1;
+      });
 
       setTodoList(todos);
       setIsLoading(false);
@@ -99,10 +105,18 @@ function App() {
    }  
     console.log("app:")
 
+
+
    const Home = () => (
      <>
        <h1>Todo List</h1>
        <AddTodoForm onAddTodo={addTodo} />
+
+       <hr />
+       
+
+
+       <hr />       
 
        {isLoading ? (
          <p>Loading...</p>
