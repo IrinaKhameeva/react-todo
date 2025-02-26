@@ -2,22 +2,55 @@ import React from "react";
 import style from "./TodoListItem.module.css";
 import PropTypes from 'prop-types';
 
-function TodoListItem({item, onRemoveTodo}) {
-    console.log("TLI added item:" + item)
-        return (
-        <li key={item.id} className={style.ListItem}>
-            {item.title}
-            <button type="button" onClick={() => onRemoveTodo(item.id)}>"Remove"</button>
-        </li>
+
+
+const TodoListItem = ({ todo, onRemoveTodo, onToggleComplete, onToggleEdit, onEditTodo }) => {
+    const handleEdit = (e) => {
+      if (e.key === 'Enter') {
+        onEditTodo(todo.id, e.target.value);
+      }
+    };
+  
+    return (
+      <li className={style.ListItem}>
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={() => onToggleComplete(todo.id)}
+        />
+        {todo.isEditing ? (
+          <input
+            type="text"
+            defaultValue={todo.title}
+            onKeyDown={handleEdit}
+            onBlur={(e) => onEditTodo(todo.id, e.target.value)}
+          />
+        ) : (
+          <span
+            style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+            onDoubleClick={() => onToggleEdit(todo.id)}
+          >
+            {todo.title}
+          </span>
+        )}
+        <button onClick={() => onRemoveTodo(todo.id)}>Remove</button>
+      </li>
     );
-}
+  };
+
+
 
 TodoListItem.propTypes = {
-    item: PropTypes.shape({
+    todo: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      title: PropTypes.string.isRequired
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool.isRequired,
+      isEditing: PropTypes.bool.isRequired
     }).isRequired,
-    onRemoveTodo: PropTypes.func.isRequired
-};
+    onRemoveTodo: PropTypes.func.isRequired,
+    onToggleComplete: PropTypes.func.isRequired,
+    onToggleEdit: PropTypes.func.isRequired,
+    onEditTodo: PropTypes.func.isRequired
+  };
 
 export default TodoListItem;
